@@ -24,20 +24,67 @@ namespace CurrencyConverter_Static
         public MainWindow()
         {
             InitializeComponent();
-            lblCurrency.Content = "Hello World";
+            BindCurrency();
         }
 
         private void BindCurrency()
         {
             DataTable dtCurrency = new DataTable(); 
             dtCurrency.Columns.Add("Text");
-            dtCurrency.Columns.Add("Value");
+            dtCurrency.Columns.Add("Value");    
 
+            dtCurrency.Rows.Add("--SELECT--", 0);
+            dtCurrency.Rows.Add("USD", 1);
+            dtCurrency.Rows.Add("UAH", 37);
+            dtCurrency.Rows.Add("BRL", 5);
+            dtCurrency.Rows.Add("INR", 82);
+            dtCurrency.Rows.Add("PLN", 4);
+            dtCurrency.Rows.Add("ARS", 268);
+
+            cmbFromCurrency.ItemsSource = dtCurrency.DefaultView;
+            cmbFromCurrency.DisplayMemberPath = "Text";
+            cmbFromCurrency.SelectedValuePath = "Value";
+            cmbFromCurrency.SelectedIndex = 0;
+
+            cmbToCurrency.ItemsSource = dtCurrency.DefaultView;
+            cmbToCurrency.DisplayMemberPath = "Text";
+            cmbToCurrency.SelectedValuePath = "Value";
+            cmbToCurrency.SelectedIndex = 0;
         }
 
         private void Convert_Click(object sender, RoutedEventArgs e)
         {
-            lblCurrency.Content = "Hello Convert Clicker";
+            double ConvertedValue;
+
+            if (txtCurrency.Text == null || txtCurrency.Text.Trim() == "")
+            {
+                //If amount textbox is Null or Blank it will show the message box   
+                MessageBox.Show("Please Enter Currency", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                //After clicking on message box OK sets the Focus on amount textbox
+                txtCurrency.Focus();
+                return;
+            }
+
+            else if (cmbFromCurrency.SelectedValue == null || cmbFromCurrency.SelectedIndex == 0)
+            {
+                //It will show the message
+                MessageBox.Show("Please Select Currency From", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                //Set focus on From Combobox
+                cmbFromCurrency.Focus();
+                return;
+            }
+
+            else if (cmbToCurrency.SelectedValue == null || cmbToCurrency.SelectedIndex == 0)
+            {
+                //It will show the message
+                MessageBox.Show("Please Select Currency To", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                //Set focus on To Combobox
+                cmbToCurrency.Focus();
+                return;
+            }
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
