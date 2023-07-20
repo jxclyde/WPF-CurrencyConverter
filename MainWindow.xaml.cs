@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,14 @@ namespace CurrencyConverter_Static
             lblCurrency.Content = "Hello World";
         }
 
+        private void BindCurrency()
+        {
+            DataTable dtCurrency = new DataTable(); 
+            dtCurrency.Columns.Add("Text");
+            dtCurrency.Columns.Add("Value");
+
+        }
+
         private void Convert_Click(object sender, RoutedEventArgs e)
         {
             lblCurrency.Content = "Hello Convert Clicker";
@@ -38,7 +47,7 @@ namespace CurrencyConverter_Static
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-
+            //cmbFromCurrency
         }
     }
 }
