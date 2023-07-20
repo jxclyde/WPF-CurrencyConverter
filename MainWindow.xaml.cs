@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,15 +32,15 @@ namespace CurrencyConverter_Static
         {
             DataTable dtCurrency = new DataTable(); 
             dtCurrency.Columns.Add("Text");
-            dtCurrency.Columns.Add("Value");    
+            dtCurrency.Columns.Add("Value");
 
             dtCurrency.Rows.Add("--SELECT--", 0);
-            dtCurrency.Rows.Add("USD", 1);
-            dtCurrency.Rows.Add("UAH", 37);
-            dtCurrency.Rows.Add("BRL", 5);
-            dtCurrency.Rows.Add("INR", 82);
-            dtCurrency.Rows.Add("PLN", 4);
-            dtCurrency.Rows.Add("ARS", 268);
+            dtCurrency.Rows.Add("INR", 1);
+            dtCurrency.Rows.Add("USD", 75);
+            dtCurrency.Rows.Add("EUR", 85);
+            dtCurrency.Rows.Add("SAR", 20);
+            dtCurrency.Rows.Add("POUND", 5);
+            dtCurrency.Rows.Add("DEM", 43);
 
             cmbFromCurrency.ItemsSource = dtCurrency.DefaultView;
             cmbFromCurrency.DisplayMemberPath = "Text";
@@ -81,20 +82,50 @@ namespace CurrencyConverter_Static
                 //It will show the message
                 MessageBox.Show("Please Select Currency To", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                
+                //Set focus on To Combobox
                 cmbToCurrency.Focus();
                 return;
+            }
+
+            if (cmbFromCurrency.Text == cmbToCurrency.Text)
+            {
+                //The amount textbox value set in ConvertedValue
+                //Textbox text have string and ConvertedValue is double datatype
+                ConvertedValue = double.Parse(txtCurrency.Text);
+
+                // and ToString("N3") is used to place 000 after after the(.)
+                lblCurrency.Content = cmbToCurrency.Text + " " + ConvertedValue.ToString("N3");
+            }
+            else
+            {
+                ConvertedValue = (double.Parse(cmbFromCurrency.SelectedValue.ToString()) * double.Parse(txtCurrency.Text)) / double.Parse(cmbToCurrency.SelectedValue.ToString());
+
+                //Result in label -> converted currency and converted currency name
+                lblCurrency.Content = cmbToCurrency.Text + " " + ConvertedValue.ToString("N3");
             }
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            lblCurrency.Content = "Hello Clear Clicker";
+            ClearControls();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            //cmbFromCurrency
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void ClearControls()
+        {
+            txtCurrency.Text = string.Empty;
+
+            if (cmbFromCurrency.Items.Count > 0)
+                cmbFromCurrency.SelectedIndex = 0;
+            if (cmbToCurrency.Items.Count > 0)
+                cmbToCurrency.SelectedIndex = 0;
+            lblCurrency.Content = "";
+            txtCurrency.Focus();
         }
     }
 }
