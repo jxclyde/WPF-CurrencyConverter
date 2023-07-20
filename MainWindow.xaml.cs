@@ -81,7 +81,7 @@ namespace CurrencyConverter_Static
                 //It will show the message
                 MessageBox.Show("Please Select Currency To", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                //Set focus on To Combobox
+                
                 cmbToCurrency.Focus();
                 return;
             }
